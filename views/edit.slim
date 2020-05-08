@@ -1,0 +1,7 @@
+p Here we go again
+h3 Lang: #{locale.language}
+a(href='/download') Download
+
+p
+  - locale.data.each do |node|
+    == slim :node, locals: { node: node }

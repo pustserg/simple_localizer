@@ -1,0 +1,13 @@
+ul.node {
+  list-style-type: none;
+}
+
+span.node-scope {
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+  color: grey;
+}
+
+.node-edit-form {
+  display: none;
+}

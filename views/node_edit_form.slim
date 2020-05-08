@@ -1,0 +1,6 @@
+div(class="node-edit-form" id="node-edit-form-#{node.parent_key}")
+  form(action="/update" enctype="multipart/form-data" method="post")
+    input(type="hidden" name="parent_key" value=node.parent_key)
+    textarea(type="text" name="new_val")
+      = node.value
+    input(type="submit" value="save")

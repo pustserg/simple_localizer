@@ -1,0 +1,11 @@
+ul(class="node" data-mgl=node.level)
+  li
+    = "#{node.key}: "
+    span(class="node-value" id=node.parent_key)
+      = node.value
+    - if node.value
+      == slim :node_edit_form, locals: { node: node }
+    span.node-scope
+      |(scope: #{node.parent_key})
+  - node.children.each do |child|
+    == slim :node, locals: { node: child }
