@@ -52,6 +52,17 @@ class App < Sinatra::Base
     end
   end
 
+  post '/copy' do
+    old_locale = load_locale
+    if old_locale && params[:lang]
+      locale = old_locale.copy(params[:lang])
+      dump_locale(locale)
+      redirect to('/edit')
+    else
+      redirect to('/')
+    end
+  end
+
   def dump_locale(locale)
     File.open(CURRENT_LOCALE_FILENAME, 'wb') do |f|
       f.write(Marshal.dump(locale))

@@ -1,7 +1,8 @@
-p Here we go again
-h3 Lang: #{locale.language}
-a(href='/download') Download
-
+.copy-locale-form
+    form(action="/copy" enctype="multipart/form-data" method="post")
+      input(type="text" name="lang")
+      input(type="submit" value="Create a copy")
+h3 Language: #{locale.language}
 p
   - locale.data.each do |node|
     == slim :node, locals: { node: node }

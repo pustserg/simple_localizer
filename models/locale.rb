@@ -7,7 +7,7 @@ class Locale
   class << self
     def parse(yaml_hash)
       lang = yaml_hash.keys.first
-      data = yaml_hash[lang]
+      data = yaml_hash[lang].map { |(k, v)| Node.parse({ k => v }) }
       new(lang, data)
     end
   end
@@ -16,7 +16,7 @@ class Locale
 
   def initialize(language, data)
     @language = language
-    @data = data.map { |(k, v)| Node.parse({ k => v }) }
+    @data = data
   end
 
   def to_hash
@@ -38,6 +38,10 @@ class Locale
 
   def find_node_by_key(node_key, collection = data)
     flat_nodes.find { |node| node.parent_key.eql?(node_key) }
+  end
+
+  def copy(lang)
+    Locale.new(lang, data.map(&:copy_empty))
   end
 
   private

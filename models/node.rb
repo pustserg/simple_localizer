@@ -34,6 +34,14 @@ class Node
     end
   end
 
+  def copy_empty
+    Node.new key: key,
+             children: children.map(&:copy_empty),
+             value: (parent? ? nil : 'Fill me'),
+             level: level,
+             parent_key: parent_key
+  end
+
   def flat_children
     @flat_children ||= (children + children.map(&:flat_children)).flatten
   end
