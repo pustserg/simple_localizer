@@ -1,3 +1,5 @@
+![Ruby](https://github.com/pustserg/simple_localizer/workflows/Ruby/badge.svg)
+
 Commands to build and run
 
 ```
