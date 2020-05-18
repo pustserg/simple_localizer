@@ -40,13 +40,34 @@ class Locale
     flat_nodes.find { |node| node.parent_key.eql?(node_key) }
   end
 
+  def find_parent_by_key(node_key)
+    parent_key = node_key.split('.')[0...-1].join('.')
+    flat_parents.find { |node| node.key.eql?(parent_key) }
+  end
+
   def copy(lang)
     Locale.new(lang, data.map(&:copy_empty))
+  end
+
+  def add_node(node)
+    parent_node = find_parent_by_key(node.parent_key)
+    return unless parent_node
+
+    parent_node.add_child(node)
+    @flat_nodes = nil
   end
 
   private
 
   def flat_nodes
     @flat_nodes ||= data.flat_map(&:flat_children)
+  end
+
+  def flat_parents
+    all_nodes.select(&:parent?)
+  end
+
+  def all_nodes
+    data.map { |n| [n, n.children].flatten}.flatten
   end
 end

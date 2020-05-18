@@ -53,4 +53,13 @@ class Node
   def child?
     !value.nil? && children.empty?
   end
+
+  def add_child(node)
+    children << node
+    @flat_children = nil
+  end
+
+  def flat_parents
+    [self, children.flat_map(&:flat_parents)]
+  end
 end

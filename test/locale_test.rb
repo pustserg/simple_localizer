@@ -42,4 +42,23 @@ class LocaleTest < Minitest::Test
     assert first_child.children.empty?
     assert_equal first_child.value, 'Fill me'
   end
+
+  def test_add_node
+    locale = init_locale
+    node = Node.new(key: 'bye', value: 'Пока', level: 2, parent_key: 'messages.bye')
+    locale.add_node(node)
+
+    assert_equal locale.find_node_by_key('messages.bye'), node
+  end
+
+  def init_locale
+    yaml = {
+      "ru" => {
+        "messages" => {
+          "hello" => "Привет"
+        }
+      }
+    }
+    Locale.parse(yaml)
+  end
 end
