@@ -42,15 +42,15 @@ class Node
              parent_key: parent_key
   end
 
-  def flat_children
-    @flat_children ||= (children + children.map(&:flat_children)).flatten
-  end
-
   def parent?
     value.nil? && !children.empty?
   end
 
   def child?
     !value.nil? && children.empty?
+  end
+
+  def add_child(node)
+    children << node
   end
 end
