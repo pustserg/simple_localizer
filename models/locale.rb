@@ -36,35 +36,38 @@ class Locale
     end
   end
 
-  def find_node_by_key(node_key, collection = data)
-    flat_nodes.find { |node| node.parent_key.eql?(node_key) }
-  end
-
-  def find_parent_by_key(node_key)
-    parent_key = node_key.split('.')[0...-1].join('.')
-    flat_parents.find { |node| node.key.eql?(parent_key) }
-  end
-
   def copy(lang)
     Locale.new(lang, data.map(&:copy_empty))
   end
 
   def add_node(node)
-    parent_node = find_parent_by_key(node.parent_key)
-    return unless parent_node
-
-    parent_node.add_child(node)
-    @flat_nodes = nil
+    if node.parent_key.eql?('')
+      add_node_to_top_level(node)
+    else
+      add_node_to_low_level(node)
+    end
   end
 
   private
 
-  def flat_nodes
-    @flat_nodes ||= data.flat_map(&:flat_children)
+  def find_node_by_key(node_key, collection = data)
+    all_nodes.find { |node| node.parent_key.eql?(node_key) }
   end
 
-  def flat_parents
-    all_nodes.select(&:parent?)
+  def find_parent_by_key(node_key)
+    parent_key = node_key.split('.')[0...-1].join('.')
+    all_nodes.find { |node| node.key.eql?(parent_key) }
+  end
+
+  def add_node_to_top_level(node)
+    data << node
+  end
+
+  def add_node_to_low_level(node)
+    parent_node = find_parent_by_key(node.parent_key)
+    return unless parent_node
+
+    parent_node.add_child(node)
   end
 
   def all_nodes

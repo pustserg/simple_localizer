@@ -16,7 +16,7 @@ class LocaleTest < Minitest::Test
     assert locale.is_a?(Locale)
     assert_equal locale.language, 'ru'
     assert_equal locale.data.size, 1
-    assert_equal locale.find_node_by_key('messages.hello').value, 'Привет'
+    assert_equal locale.send(:find_node_by_key, 'messages.hello').value, 'Привет'
   end
 
   def test_copy
@@ -48,7 +48,15 @@ class LocaleTest < Minitest::Test
     node = Node.new(key: 'bye', value: 'Пока', level: 2, parent_key: 'messages.bye')
     locale.add_node(node)
 
-    assert_equal locale.find_node_by_key('messages.bye'), node
+    assert_equal locale.send(:find_node_by_key, 'messages.bye'), node
+  end
+
+  def test_add_node_to_top_level
+    locale = init_locale
+    node = Node.new(key: 'errors', level: 1)
+    locale.add_node(node)
+    added_node = locale.data.find { |n| n.key.eql?('errors') }
+    assert_equal added_node, node
   end
 
   def init_locale
